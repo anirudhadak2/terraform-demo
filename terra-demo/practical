@@ -1,0 +1,1083 @@
+
+
+
+
+
+
+terraform apply 
+
+
+
+         + "Name" = "Network1_Int_gateway"
+        }
+      + tags_all = {
+          + "Name" = "Network1_Int_gateway"
+        }
+      + vpc_id   = (known after apply)
+    }
+
+  # aws_route_table.myroute1 will be created
+  + resource "aws_route_table" "myroute1" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = [
+          + {
+              + carrier_gateway_id         = ""
+              + cidr_block                 = "0.0.0.0/0"
+              + core_network_arn           = ""
+              + destination_prefix_list_id = ""
+              + egress_only_gateway_id     = ""
+              + gateway_id                 = (known after apply)
+              + ipv6_cidr_block            = ""
+              + local_gateway_id           = ""
+              + nat_gateway_id             = ""
+              + network_interface_id       = ""
+              + transit_gateway_id         = ""
+              + vpc_endpoint_id            = ""
+              + vpc_peering_connection_id  = ""
+            },
+        ]
+      + tags_all         = (known after apply)
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table_association.route_to_sub1 will be created
+  + resource "aws_route_table_association" "route_to_sub1" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_security_group.sg1 will be created
+  + resource "aws_security_group" "sg1" {
+      + arn                    = (known after apply)
+      + description            = "Allow ssh and http inbound traffic"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = ""
+              + from_port        = 0
+              + ipv6_cidr_blocks = [
+                  + "::/0",
+                ]
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + description      = "ssh from VPC"
+              + from_port        = 22
+              + ipv6_cidr_blocks = [
+                  + "::/0",
+                ]
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 22
+            },
+        ]
+      + name                   = "allow_ssh_http"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Name" = "allow_http_ssh"
+        }
+      + tags_all               = {
+          + "Name" = "allow_http_ssh"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # aws_subnet.network1_sub1 will be created
+  + resource "aws_subnet" "network1_sub1" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "100.100.1.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Name" = "Network1_Subnet1"
+        }
+      + tags_all                                       = {
+          + "Name" = "Network1_Subnet1"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_vpc.network1 will be created
+  + resource "aws_vpc" "network1" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "100.100.0.0/16"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_dns_hostnames                 = (known after apply)
+      + enable_dns_support                   = true
+      + enable_network_address_usage_metrics = (known after apply)
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + tags                                 = {
+          + "Name" = "DevelopmentNetwork"
+        }
+      + tags_all                             = {
+          + "Name" = "DevelopmentNetwork"
+        }
+    }
+
+Plan: 7 to add, 0 to change, 0 to destroy.
+---------------------------------------------------
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+
+aws_vpc.network1: Creating...
+aws_vpc.network1: Creation complete after 4s [id=vpc-0b54cec72fedfc8db]
+aws_subnet.network1_sub1: Creating...
+aws_internet_gateway.mygetway: Creating...
+aws_security_group.sg1: Creating...
+aws_subnet.network1_sub1: Creation complete after 2s [id=subnet-011d141ad0d6277e0]
+aws_internet_gateway.mygetway: Creation complete after 2s [id=igw-0726dbc05f9c536fa]
+aws_route_table.myroute1: Creating...
+aws_route_table.myroute1: Creation complete after 3s [id=rtb-0704768dd7084e0d9]
+aws_route_table_association.route_to_sub1: Creating...
+aws_security_group.sg1: Creation complete after 5s [id=sg-0560bbbc2db60441e]
+aws_instance.vm1: Creating...
+aws_route_table_association.route_to_sub1: Creation complete after 1s [id=rtbassoc-0c335c4ccef08ff2c]
+aws_instance.vm1: Still creating... [10s elapsed]
+aws_instance.vm1: Still creating... [20s elapsed]
+aws_instance.vm1: Still creating... [30s elapsed]
+aws_instance.vm1: Creation complete after 35s [id=i-07bbcddd567064835]
+
+Apply complete! Resources: 7 added, 0 changed, 0 destroyed.
+
+------------------------------------------------------------------------------------------
+
+
+
+
+
+controlplane $ ls
+connection.tf  filesystem  main.tf  terraform.tfstate  terraform.tfvars  vars.tf
+controlplane $ ls
+connection.tf  filesystem  main.tf  terraform.tfstate  terraform.tfvars  vars.tf
+
+
+
+--------------------------------
+controlplane $ cat vars.tf
+variable "myregion" {
+description = "Region Name"
+}
+
+variable "myaccesskey" {
+sensitive = true 
+}
+
+variable "mysecretkey" {
+sensitive = true
+}
+
+
+
+-----------------------------------------
+controlplane $ cat terraform.tfvars
+
+myregion="us-east-1"
+myaccesskey="AKIAZLVK4VXXFZU3VU73"
+mysecretkey="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"
+controlplane $ cat connection.tf
+terraform {
+   required_providers  {
+     aws = {
+     source = "hashicorp/aws"
+     version = "5.7.0"
+    }
+   }
+  }
+
+provider "aws"  {
+        region = var.myregion
+        access_key = var.myaccesskey 
+        secret_key = var.mysecretkey 
+}
+controlplane $ cat main.tf
+### VPC Creation 
+resource  "aws_vpc"  "network1" {
+          instance_tenancy = "default"
+          cidr_block = "100.100.0.0/16"
+          tags = {
+                 Name = "DevelopmentNetwork"
+           }
+  }
+
+
+
+### Internet Gateway
+resource "aws_internet_gateway" "mygetway" {
+   vpc_id = aws_vpc.network1.id
+
+    tags = {
+      Name = "Network1_Int_gateway"
+  }
+ }
+
+
+
+###  Subnet on one AZ
+resource "aws_subnet"  "network1_sub1" {
+  vpc_id = aws_vpc.network1.id
+  cidr_block = "100.100.1.0/24"
+  availability_zone = "us-east-1a"
+  
+  tags = {
+    Name = "Network1_Subnet1"
+   }
+  }
+
+### Route Table
+ resource "aws_route_table" "myroute1" { 
+  vpc_id = aws_vpc.network1.id
+  route {
+     cidr_block = "0.0.0.0/0"
+     gateway_id = aws_internet_gateway.mygetway.id
+      }
+    }
+
+### Route Table Association With subnet 
+resource "aws_route_table_association" "route_to_sub1" { 
+   subnet_id = aws_subnet.network1_sub1.id
+   route_table_id = aws_route_table.myroute1.id 
+   }
+  
+
+###  Security Group 
+resource  "aws_security_group"  "sg1" { 
+  name  = "allow_ssh_http" 
+  description = "Allow ssh and http inbound traffic" 
+ vpc_id  = aws_vpc.network1.id
+
+ ingress  { 
+   description  =  "ssh from VPC"
+   from_port    = 22
+   to_port      = 22
+   protocol     = "tcp"
+   cidr_blocks  = ["0.0.0.0/0"]
+   ipv6_cidr_blocks = ["::/0"]
+   }
+
+  egress  {
+   from_port   = 0 
+   to_port     = 0
+   protocol    = "-1"
+   cidr_blocks = ["0.0.0.0/0"]
+   ipv6_cidr_blocks = ["::/0"]
+
+ }
+ 
+  tags = {
+   Name = "allow_http_ssh" 
+  }
+ }
+
+
+
+### Instance as webserver on RHEL9
+ resource "aws_instance" "vm1"  {
+     ami  =  "ami-026ebd4cfe2c043b2"
+     instance_type = "t2.micro"
+     associate_public_ip_address = true 
+     key_name = "oct-7"
+     subnet_id =  aws_subnet.network1_sub1.id
+     vpc_security_group_ids = [aws_security_group.sg1.id]
+     user_data = <<-EOF
+      #!/bin/bash 
+     sudo  dnf install httpd  -y
+     echo  "Hello from  Anirudha...!"  > /var/www/html/index.html 
+     sudo  systemctl restart httpd
+     EOF  
+     tags = { 
+      Name = "Webserver1"
+       }
+    }
+
+-----------------------------------------------------------------
+
+
+
+controlplane $ cat terraform.tfstate
+{
+  "version": 4,
+  "terraform_version": "1.6.0",
+  "serial": 8,
+  "lineage": "3bc5c89b-a7a7-4212-5f24-cc15e73a74e2",
+  "outputs": {},
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "aws_instance",
+      "name": "vm1",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "ami": "ami-026ebd4cfe2c043b2",
+            "arn": "arn:aws:ec2:us-east-1:643529747950:instance/i-07bbcddd567064835",
+            "associate_public_ip_address": true,
+            "availability_zone": "us-east-1a",
+            "capacity_reservation_specification": [
+              {
+                "capacity_reservation_preference": "open",
+                "capacity_reservation_target": []
+              }
+            ],
+            "cpu_core_count": 1,
+            "cpu_options": [
+              {
+                "amd_sev_snp": "",
+                "core_count": 1,
+                "threads_per_core": 1
+              }
+            ],
+            "cpu_threads_per_core": 1,
+            "credit_specification": [
+              {
+                "cpu_credits": "standard"
+              }
+            ],
+            "disable_api_stop": false,
+            "disable_api_termination": false,
+            "ebs_block_device": [],
+            "ebs_optimized": false,
+            "enclave_options": [
+              {
+                "enabled": false
+              }
+            ],
+            "ephemeral_block_device": [],
+            "get_password_data": false,
+            "hibernation": false,
+            "host_id": "",
+            "host_resource_group_arn": null,
+            "iam_instance_profile": "",
+            "id": "i-07bbcddd567064835",
+            "instance_initiated_shutdown_behavior": "stop",
+            "instance_lifecycle": "",
+            "instance_market_options": [],
+            "instance_state": "running",
+            "instance_type": "t2.micro",
+            "ipv6_address_count": 0,
+            "ipv6_addresses": [],
+            "key_name": "oct-7",
+            "launch_template": [],
+            "maintenance_options": [
+              {
+                "auto_recovery": "default"
+              }
+            ],
+            "metadata_options": [
+              {
+                "http_endpoint": "enabled",
+                "http_put_response_hop_limit": 1,
+                "http_tokens": "optional",
+                "instance_metadata_tags": "disabled"
+              }
+            ],
+            "monitoring": false,
+            "network_interface": [],
+            "outpost_arn": "",
+            "password_data": "",
+            "placement_group": "",
+            "placement_partition_number": 0,
+            "primary_network_interface_id": "eni-0a7ee20f6b7e8ea25",
+            "private_dns": "ip-100-100-1-42.ec2.internal",
+            "private_dns_name_options": [
+              {
+                "enable_resource_name_dns_a_record": false,
+                "enable_resource_name_dns_aaaa_record": false,
+                "hostname_type": "ip-name"
+              }
+            ],
+            "private_ip": "100.100.1.42",
+            "public_dns": "",
+            "public_ip": "54.161.192.157",
+            "root_block_device": [
+              {
+                "delete_on_termination": true,
+                "device_name": "/dev/sda1",
+                "encrypted": false,
+                "iops": 100,
+                "kms_key_id": "",
+                "tags": {},
+                "throughput": 0,
+                "volume_id": "vol-083c663620244126d",
+                "volume_size": 10,
+                "volume_type": "gp2"
+              }
+            ],
+            "secondary_private_ips": [],
+            "security_groups": [],
+            "source_dest_check": true,
+            "spot_instance_request_id": "",
+            "subnet_id": "subnet-011d141ad0d6277e0",
+            "tags": {
+              "Name": "Webserver1"
+            },
+            "tags_all": {
+              "Name": "Webserver1"
+            },
+            "tenancy": "default",
+            "timeouts": null,
+            "user_data": "f481be2fcdd11f2c2840a2f5db72c82d6e19f871",
+            "user_data_base64": null,
+            "user_data_replace_on_change": false,
+            "volume_tags": null,
+            "vpc_security_group_ids": [
+              "sg-0560bbbc2db60441e"
+            ]
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMCwidXBkYXRlIjo2MDAwMDAwMDAwMDB9LCJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "aws_security_group.sg1",
+            "aws_subnet.network1_sub1",
+            "aws_vpc.network1"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_internet_gateway",
+      "name": "mygetway",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:643529747950:internet-gateway/igw-0726dbc05f9c536fa",
+            "id": "igw-0726dbc05f9c536fa",
+            "owner_id": "643529747950",
+            "tags": {
+              "Name": "Network1_Int_gateway"
+            },
+            "tags_all": {
+              "Name": "Network1_Int_gateway"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0b54cec72fedfc8db"
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_vpc.network1"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_route_table",
+      "name": "myroute1",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:643529747950:route-table/rtb-0704768dd7084e0d9",
+            "id": "rtb-0704768dd7084e0d9",
+            "owner_id": "643529747950",
+            "propagating_vgws": [],
+            "route": [
+              {
+                "carrier_gateway_id": "",
+                "cidr_block": "0.0.0.0/0",
+                "core_network_arn": "",
+                "destination_prefix_list_id": "",
+                "egress_only_gateway_id": "",
+                "gateway_id": "igw-0726dbc05f9c536fa",
+                "ipv6_cidr_block": "",
+                "local_gateway_id": "",
+                "nat_gateway_id": "",
+                "network_interface_id": "",
+                "transit_gateway_id": "",
+                "vpc_endpoint_id": "",
+                "vpc_peering_connection_id": ""
+              }
+            ],
+            "tags": null,
+            "tags_all": {},
+            "timeouts": null,
+            "vpc_id": "vpc-0b54cec72fedfc8db"
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_internet_gateway.mygetway",
+            "aws_vpc.network1"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_route_table_association",
+      "name": "route_to_sub1",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": "",
+            "id": "rtbassoc-0c335c4ccef08ff2c",
+            "route_table_id": "rtb-0704768dd7084e0d9",
+            "subnet_id": "subnet-011d141ad0d6277e0",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_internet_gateway.mygetway",
+            "aws_route_table.myroute1",
+            "aws_subnet.network1_sub1",
+            "aws_vpc.network1"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "sg1",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:643529747950:security-group/sg-0560bbbc2db60441e",
+            "description": "Allow ssh and http inbound traffic",
+            "egress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "",
+                "from_port": 0,
+                "ipv6_cidr_blocks": [
+                  "::/0"
+                ],
+                "prefix_list_ids": [],
+                "protocol": "-1",
+                "security_groups": [],
+                "self": false,
+                "to_port": 0
+              }
+            ],
+            "id": "sg-0560bbbc2db60441e",
+            "ingress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "ssh from VPC",
+                "from_port": 22,
+                "ipv6_cidr_blocks": [
+                  "::/0"
+                ],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 22
+              }
+            ],
+            "name": "allow_ssh_http",
+            "name_prefix": "",
+            "owner_id": "643529747950",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "allow_http_ssh"
+            },
+            "tags_all": {
+              "Name": "allow_http_ssh"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0b54cec72fedfc8db"
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "aws_vpc.network1"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_subnet",
+      "name": "network1_sub1",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:643529747950:subnet/subnet-011d141ad0d6277e0",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "us-east-1a",
+            "availability_zone_id": "use1-az2",
+            "cidr_block": "100.100.1.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-011d141ad0d6277e0",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "643529747950",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "Network1_Subnet1"
+            },
+            "tags_all": {
+              "Name": "Network1_Subnet1"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0b54cec72fedfc8db"
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "aws_vpc.network1"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_vpc",
+      "name": "network1",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:us-east-1:643529747950:vpc/vpc-0b54cec72fedfc8db",
+            "assign_generated_ipv6_cidr_block": false,
+            "cidr_block": "100.100.0.0/16",
+            "default_network_acl_id": "acl-01fbf226bdf7f99ae",
+            "default_route_table_id": "rtb-0dac0b5d1f48e4d0d",
+            "default_security_group_id": "sg-0e3e68fa2493b53e9",
+            "dhcp_options_id": "dopt-015045476cab5eaca",
+            "enable_dns_hostnames": false,
+            "enable_dns_support": true,
+            "enable_network_address_usage_metrics": false,
+            "id": "vpc-0b54cec72fedfc8db",
+            "instance_tenancy": "default",
+            "ipv4_ipam_pool_id": null,
+            "ipv4_netmask_length": null,
+            "ipv6_association_id": "",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_network_border_group": "",
+            "ipv6_ipam_pool_id": "",
+            "ipv6_netmask_length": 0,
+            "main_route_table_id": "rtb-0dac0b5d1f48e4d0d",
+            "owner_id": "643529747950",
+            "tags": {
+              "Name": "DevelopmentNetwork"
+            },
+            "tags_all": {
+              "Name": "DevelopmentNetwork"
+            }
+          },
+          "sensitive_attributes": [],
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ=="
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}
+
+
+
+-----------------------------------------------------------------------------
+
+
+
+controlplane $ terraform  destroy
+aws_vpc.network1: Refreshing state... [id=vpc-0b54cec72fedfc8db]
+aws_internet_gateway.mygetway: Refreshing state... [id=igw-0726dbc05f9c536fa]
+aws_subnet.network1_sub1: Refreshing state... [id=subnet-011d141ad0d6277e0]
+aws_security_group.sg1: Refreshing state... [id=sg-0560bbbc2db60441e]
+aws_route_table.myroute1: Refreshing state... [id=rtb-0704768dd7084e0d9]
+aws_instance.vm1: Refreshing state... [id=i-07bbcddd567064835]
+aws_route_table_association.route_to_sub1: Refreshing state... [id=rtbassoc-0c335c4ccef08ff2c]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_instance.vm1 will be destroyed
+  - resource "aws_instance" "vm1" {
+      - ami                                  = "ami-026ebd4cfe2c043b2" -> null
+      - arn                                  = "arn:aws:ec2:us-east-1:643529747950:instance/i-07bbcddd567064835" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-1a" -> null
+      - cpu_core_count                       = 1 -> null
+      - cpu_threads_per_core                 = 1 -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-07bbcddd567064835" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t2.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "oct-7" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-0a7ee20f6b7e8ea25" -> null
+      - private_dns                          = "ip-100-100-1-42.ec2.internal" -> null
+      - private_ip                           = "100.100.1.42" -> null
+      - public_ip                            = "54.161.192.157" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-011d141ad0d6277e0" -> null
+      - tags                                 = {
+          - "Name" = "Webserver1"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "Webserver1"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data                            = "f481be2fcdd11f2c2840a2f5db72c82d6e19f871" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-0560bbbc2db60441e",
+        ] -> null
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count       = 1 -> null
+          - threads_per_core = 1 -> null
+        }
+
+      - credit_specification {
+          - cpu_credits = "standard" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_put_response_hop_limit = 1 -> null
+          - http_tokens                 = "optional" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/sda1" -> null
+          - encrypted             = false -> null
+          - iops                  = 100 -> null
+          - tags                  = {} -> null
+          - throughput            = 0 -> null
+          - volume_id             = "vol-083c663620244126d" -> null
+          - volume_size           = 10 -> null
+          - volume_type           = "gp2" -> null
+        }
+    }
+
+  # aws_internet_gateway.mygetway will be destroyed
+  - resource "aws_internet_gateway" "mygetway" {
+      - arn      = "arn:aws:ec2:us-east-1:643529747950:internet-gateway/igw-0726dbc05f9c536fa" -> null
+      - id       = "igw-0726dbc05f9c536fa" -> null
+      - owner_id = "643529747950" -> null
+      - tags     = {
+          - "Name" = "Network1_Int_gateway"
+        } -> null
+      - tags_all = {
+          - "Name" = "Network1_Int_gateway"
+        } -> null
+      - vpc_id   = "vpc-0b54cec72fedfc8db" -> null
+    }
+
+  # aws_route_table.myroute1 will be destroyed
+  - resource "aws_route_table" "myroute1" {
+      - arn              = "arn:aws:ec2:us-east-1:643529747950:route-table/rtb-0704768dd7084e0d9" -> null
+      - id               = "rtb-0704768dd7084e0d9" -> null
+      - owner_id         = "643529747950" -> null
+      - propagating_vgws = [] -> null
+      - route            = [
+          - {
+              - carrier_gateway_id         = ""
+              - cidr_block                 = "0.0.0.0/0"
+              - core_network_arn           = ""
+              - destination_prefix_list_id = ""
+              - egress_only_gateway_id     = ""
+              - gateway_id                 = "igw-0726dbc05f9c536fa"
+              - ipv6_cidr_block            = ""
+              - local_gateway_id           = ""
+              - nat_gateway_id             = ""
+              - network_interface_id       = ""
+              - transit_gateway_id         = ""
+              - vpc_endpoint_id            = ""
+              - vpc_peering_connection_id  = ""
+            },
+        ] -> null
+      - tags             = {} -> null
+      - tags_all         = {} -> null
+      - vpc_id           = "vpc-0b54cec72fedfc8db" -> null
+    }
+
+  # aws_route_table_association.route_to_sub1 will be destroyed
+  - resource "aws_route_table_association" "route_to_sub1" {
+      - id             = "rtbassoc-0c335c4ccef08ff2c" -> null
+      - route_table_id = "rtb-0704768dd7084e0d9" -> null
+      - subnet_id      = "subnet-011d141ad0d6277e0" -> null
+    }
+
+  # aws_security_group.sg1 will be destroyed
+  - resource "aws_security_group" "sg1" {
+      - arn                    = "arn:aws:ec2:us-east-1:643529747950:security-group/sg-0560bbbc2db60441e" -> null
+      - description            = "Allow ssh and http inbound traffic" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = ""
+              - from_port        = 0
+              - ipv6_cidr_blocks = [
+                  - "::/0",
+                ]
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+            },
+        ] -> null
+      - id                     = "sg-0560bbbc2db60441e" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = ""
+              - from_port        = 80
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 80
+            },
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = "ssh from VPC"
+              - from_port        = 22
+              - ipv6_cidr_blocks = [
+                  - "::/0",
+                ]
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 22
+            },
+        ] -> null
+      - name                   = "allow_ssh_http" -> null
+      - owner_id               = "643529747950" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {
+          - "Name" = "allow_http_ssh"
+        } -> null
+      - tags_all               = {
+          - "Name" = "allow_http_ssh"
+        } -> null
+      - vpc_id                 = "vpc-0b54cec72fedfc8db" -> null
+    }
+
+  # aws_subnet.network1_sub1 will be destroyed
+  - resource "aws_subnet" "network1_sub1" {
+      - arn                                            = "arn:aws:ec2:us-east-1:643529747950:subnet/subnet-011d141ad0d6277e0" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1a" -> null
+      - availability_zone_id                           = "use1-az2" -> null
+      - cidr_block                                     = "100.100.1.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-011d141ad0d6277e0" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = false -> null
+      - owner_id                                       = "643529747950" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Name" = "Network1_Subnet1"
+        } -> null
+      - tags_all                                       = {
+          - "Name" = "Network1_Subnet1"
+        } -> null
+      - vpc_id                                         = "vpc-0b54cec72fedfc8db" -> null
+    }
+
+  # aws_vpc.network1 will be destroyed
+  - resource "aws_vpc" "network1" {
+      - arn                                  = "arn:aws:ec2:us-east-1:643529747950:vpc/vpc-0b54cec72fedfc8db" -> null
+      - assign_generated_ipv6_cidr_block     = false -> null
+      - cidr_block                           = "100.100.0.0/16" -> null
+      - default_network_acl_id               = "acl-01fbf226bdf7f99ae" -> null
+      - default_route_table_id               = "rtb-0dac0b5d1f48e4d0d" -> null
+      - default_security_group_id            = "sg-0e3e68fa2493b53e9" -> null
+      - dhcp_options_id                      = "dopt-015045476cab5eaca" -> null
+      - enable_dns_hostnames                 = false -> null
+      - enable_dns_support                   = true -> null
+      - enable_network_address_usage_metrics = false -> null
+      - id                                   = "vpc-0b54cec72fedfc8db" -> null
+      - instance_tenancy                     = "default" -> null
+      - ipv6_netmask_length                  = 0 -> null
+      - main_route_table_id                  = "rtb-0dac0b5d1f48e4d0d" -> null
+      - owner_id                             = "643529747950" -> null
+      - tags                                 = {
+          - "Name" = "DevelopmentNetwork"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "DevelopmentNetwork"
+        } -> null
+    }
+
+Plan: 0 to add, 0 to change, 7 to destroy.
+
+
+---------------------------------------------------------
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+
+aws_route_table_association.route_to_sub1: Destroying... [id=rtbassoc-0c335c4ccef08ff2c]
+aws_instance.vm1: Destroying... [id=i-07bbcddd567064835]
+aws_route_table_association.route_to_sub1: Destruction complete after 2s
+aws_route_table.myroute1: Destroying... [id=rtb-0704768dd7084e0d9]
+aws_route_table.myroute1: Destruction complete after 1s
+aws_internet_gateway.mygetway: Destroying... [id=igw-0726dbc05f9c536fa]
+aws_instance.vm1: Still destroying... [id=i-07bbcddd567064835, 10s elapsed]
+aws_internet_gateway.mygetway: Still destroying... [id=igw-0726dbc05f9c536fa, 10s elapsed]
+aws_instance.vm1: Still destroying... [id=i-07bbcddd567064835, 20s elapsed]
+aws_internet_gateway.mygetway: Still destroying... [id=igw-0726dbc05f9c536fa, 20s elapsed]
+aws_instance.vm1: Destruction complete after 24s
+aws_subnet.network1_sub1: Destroying... [id=subnet-011d141ad0d6277e0]
+aws_security_group.sg1: Destroying... [id=sg-0560bbbc2db60441e]
+aws_internet_gateway.mygetway: Destruction complete after 22s
+aws_subnet.network1_sub1: Destruction complete after 2s
+aws_security_group.sg1: Destruction complete after 2s
+aws_vpc.network1: Destroying... [id=vpc-0b54cec72fedfc8db]
+aws_vpc.network1: Destruction complete after 1s
+
+Destroy complete! Resources: 7 destroyed.
+
+----------------------------------------------------------------------------------
+
+
+
+
+controlplane $ history 
+    1  apt-get update
+    2  halt
+    3  FILE=/ks/wait-background.sh; while ! test -f ${FILE}; do clear; sleep 0.1; done; bash ${FILE}
+    4  wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    5  echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+    6  sudo apt update && sudo apt install terraform
+    7  teffaform --version 
+    8  terrform --version 
+    9  terraform --version 
+   10  vi terraform,tfvars 
+   11  vi terraform.tfvars 
+   12  vi  vars.tf 
+   13  vi connection.tf 
+   14  vi main.tf 
+   15  terraform init 
+   16  terraform  plan 
+   17  vi main.tf
+   18  terraform  plan 
+   19  vi main.tf
+   20  terraform  plan 
+   21  terraform apply
+   22  ls
+   23  cat vars.tf
+   24  cat terraform.tfvars
+   25  cat connection.tf
+   26  cat main.tf
+   27  cat terraform.tfstate
+   28  terraform  destory
+   29  terraform  destroy
+   30  history 
+controlplane $ 
+
+------------------------------------------------------------------------------------------
