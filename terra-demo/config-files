@@ -1,0 +1,480 @@
+terraform task demo 
+
+
+ubuntu $ vi main.tf 
+ubuntu $ terraform validate 
+Success! The configuration is valid.
+
+ubuntu $ cat main.tf 
+### VPC Creation 
+resource  "aws_vpc"  "unnati" {
+          instance_tenancy = "default"
+          cidr_block = "10.1.0.0/16"
+          tags = {
+                 Name = "UnnatiNetwork"
+           }
+  }
+
+
+
+### Internet Gateway
+resource "aws_internet_gateway" "mygetway" {
+   vpc_id = aws_vpc.unnati.id
+
+    tags = {
+      Name = "Unnati_Int_gateway"
+  }
+ }
+
+
+
+###  Subnet on two  AZ
+###  Unnati Private subnet1
+resource "aws_subnet"  "unnati_sub1" {
+  vpc_id = aws_vpc.unnati.id
+  cidr_block = "10.1.1.0/24"
+  availability_zone = "us-east-1a"
+  
+  tags = {
+    Name = "Unnati_Private_Subnet1"
+   }
+  }
+
+
+###  Unnati Public  subnet1
+resource "aws_subnet"  "unnati_sub2" {
+  vpc_id = aws_vpc.unnati.id
+  cidr_block = "10.1.2.0/24"
+  availability_zone = "us-east-1b"
+  
+  tags = {
+    Name = "Unnati_Public_Subnet1"
+   }
+  }
+
+
+### Route Table
+ resource "aws_route_table" "myroute" { 
+  vpc_id = aws_vpc.unnati.id
+  route {
+     cidr_block = "0.0.0.0/0"
+     gateway_id = aws_internet_gateway.mygetway.id
+      }
+    }
+
+### Route Table Association With subnet 
+resource "aws_route_table_association" "route_to_public_sub2" { 
+   subnet_id = aws_subnet.unnati_sub2.id
+   route_table_id = aws_route_table.myroute.id 
+   }
+  
+
+###  Security Group 
+resource  "aws_security_group"  "sg1" { 
+  name  = "allow_ssh_http" 
+  description = "Allow ssh and http inbound traffic" 
+ vpc_id  = aws_vpc.unnati.id
+
+
+ ingress  { 
+   description  =  "ssh from VPC"
+   from_port    = 22
+   to_port      = 22
+   protocol     = "tcp"
+   cidr_blocks  = ["0.0.0.0/0"]
+   ipv6_cidr_blocks = ["::/0"]
+   }
+
+  egress  {
+   from_port   = 0 
+   to_port     = 0
+   protocol    = "-1"
+   cidr_blocks = ["0.0.0.0/0"]
+   ipv6_cidr_blocks = ["::/0"]
+
+ }
+ 
+ ingress  { 
+   description  =  "http from VPC"
+   from_port    = 80
+   to_port      = 80
+   protocol     = "tcp"
+   cidr_blocks  = ["0.0.0.0/0"]
+   ipv6_cidr_blocks = ["::/0"]
+   }
+
+  egress  {
+   from_port   = 0 
+   to_port     = 0
+   protocol    = "-1"
+   cidr_blocks = ["0.0.0.0/0"]
+   ipv6_cidr_blocks = ["::/0"]
+
+ }
+
+
+  tags = {
+   Name = "allow_http_ssh" 
+  }
+ }
+
+
+
+
+
+### Instance as webserver on RHEL9
+ resource "aws_instance" "vm1"  {
+     ami  =  "ami-026ebd4cfe2c043b2"
+     instance_type = "t2.micro"
+     associate_public_ip_address = true 
+     key_name = "oct-7"
+     subnet_id =  aws_subnet.unnati_sub1.id
+     vpc_security_group_ids = [aws_security_group.sg1.id]
+     user_data = <<-EOF
+      #!/bin/bash 
+     sudo  dnf install httpd  -y
+     echo  "Hello from  Anirudha...!  on  RHEL9 Web server... Welcome to all..!"  > /var/www/html/index.html 
+     sudo  systemctl restart httpd
+     sudo  systemctl enable httpd
+     EOF  
+     tags = { 
+      Name = "Webserver1"
+       }
+    }
+  
+
+
+### Instance as webserver on  Ubuntu
+ resource "aws_instance" "vm2"  {
+     ami  =  "ami-026ebd4cfe2c043b2"
+     instance_type = "t2.micro"
+     associate_public_ip_address = true
+     key_name = "oct-7"
+     subnet_id =  aws_subnet.unnati_sub1.id
+     vpc_security_group_ids = [aws_security_group.sg1.id]
+     user_data = <<-EOF
+      #!/bin/bash 
+     sudo  apt update
+     sudo  apt  install  apache2 -y 
+     echo  "Hello from  Anirudha...!  on  Ubuntu Web server....  Welcome to all...!"  > /var/www/html/index.html
+     echo  "Hello This is Aniudha Here ... !"  >  /var/www/html/file.txt 
+     sudo  systemctl restart apache2
+     sudo systemctl enable apache2
+     EOF  
+     tags = { 
+      Name = "Webserver2"
+       }
+    }
+
+
+
+ #### creating local  file on Ubuntu 
+
+    resource "local_file" "terraform_dev" {
+          filename = "/home/ubuntu/sample_pro/demo.txt"
+          content = "Hello From Anirudha...! file successfully created..! "
+
+  }
+
+
+
+
+   ####  Creating S3 bucket with  uploading object with public access 
+
+  
+resource "aws_s3_bucket_website_configuration" "my_bucket" {
+  bucket = "my-aws-bucket1"  # Replace with your desired bucket name
+
+
+   }
+
+
+resource "aws_s3_object" "text_object1"  {
+  bucket = aws_s3_bucket_website_configuration.my_bucket.bucket
+  key    = "example.txt"
+  acl    = "public-read"  # Set ACL to public-read for the object
+  source = "/var/www/html/file.txt"  # Replace with the path to your local text file
+}
+
+
+resource "aws_s3_object" "text_object2" {
+  bucket = aws_s3_bucket_website_configuration.my_bucket.bucket
+  key    = "example1.txt"
+  acl    = "public-read"  # Set ACL to public-read for the object
+  source = "/home/ubuntu/sample_pro/demo.txt"  # Replace with the path to your local text file
+}
+
+
+==================================================================================================
+=========================================================================================================
+====================================================================================================
+
+
+connection.tf  filesystem  main.tf  terraform.tfstate  terraform.tfstate.backup  terraform.tfvars  vars.tf
+ubuntu $  cat main.tf 
+### VPC Creation 
+resource  "aws_vpc"  "unnati" {
+          instance_tenancy = "default"
+          cidr_block = "10.1.0.0/16"
+          tags = {
+                 Name = "UnnatiNetwork"
+           }
+  }
+
+
+
+### Internet Gateway
+resource "aws_internet_gateway" "mygetway" {
+   vpc_id = aws_vpc.unnati.id
+
+    tags = {
+      Name = "Unnati_Int_gateway"
+  }
+ }
+
+
+
+###  Subnet on two  AZ
+###  Unnati Private subnet1
+resource "aws_subnet"  "unnati_sub1" {
+  vpc_id = aws_vpc.unnati.id
+  cidr_block = "10.1.1.0/24"
+  availability_zone = "us-east-1a"
+  
+  tags = {
+    Name = "Unnati_Private_Subnet1"
+   }
+  }
+
+
+###  Unnati Public  subnet1
+resource "aws_subnet"  "unnati_sub2" {
+  vpc_id = aws_vpc.unnati.id
+  cidr_block = "10.1.2.0/24"
+  availability_zone = "us-east-1b"
+  
+  tags = {
+    Name = "Unnati_Public_Subnet1"
+   }
+  }
+
+
+### Route Table
+ resource "aws_route_table" "myroute" { 
+  vpc_id = aws_vpc.unnati.id
+  route {
+     cidr_block = "0.0.0.0/0"
+     gateway_id = aws_internet_gateway.mygetway.id
+      }
+    }
+
+### Route Table Association With subnet 
+resource "aws_route_table_association" "route_to_public_sub2" { 
+   subnet_id = aws_subnet.unnati_sub2.id
+   route_table_id = aws_route_table.myroute.id 
+   }
+  
+
+###  Security Group 
+resource  "aws_security_group"  "sg1" { 
+  name  = "allow_ssh_http" 
+  description = "Allow ssh and http inbound traffic" 
+ vpc_id  = aws_vpc.unnati.id
+
+
+ ingress  { 
+   description  =  "ssh from VPC"
+   from_port    = 22
+   to_port      = 22
+   protocol     = "tcp"
+   cidr_blocks  = ["0.0.0.0/0"]
+   ipv6_cidr_blocks = ["::/0"]
+   }
+
+  egress  {
+   from_port   = 0 
+   to_port     = 0
+   protocol    = "-1"
+   cidr_blocks = ["0.0.0.0/0"]
+   ipv6_cidr_blocks = ["::/0"]
+
+ }
+ 
+ ingress  { 
+   description  =  "http from VPC"
+   from_port    = 80
+   to_port      = 80
+   protocol     = "tcp"
+   cidr_blocks  = ["0.0.0.0/0"]
+   ipv6_cidr_blocks = ["::/0"]
+   }
+
+  egress  {
+   from_port   = 0 
+   to_port     = 0
+   protocol    = "-1"
+   cidr_blocks = ["0.0.0.0/0"]
+   ipv6_cidr_blocks = ["::/0"]
+
+ }
+
+
+  tags = {
+   Name = "allow_http_ssh" 
+  }
+ }
+
+
+
+
+
+### Instance as webserver on RHEL9
+ resource "aws_instance" "vm1"  {
+     ami  =  "ami-026ebd4cfe2c043b2"
+     instance_type = "t2.micro"
+     associate_public_ip_address = true 
+     key_name = "oct-7"
+     subnet_id =  aws_subnet.unnati_sub1.id
+     vpc_security_group_ids = [aws_security_group.sg1.id]
+     user_data = <<-EOF
+      #!/bin/bash 
+     sudo  dnf install httpd  -y
+     echo  "Hello from  Anirudha...!  on  RHEL9 Web server... Welcome to all..!"  > /var/www/html/index.html 
+     sudo  systemctl restart httpd
+     sudo  systemctl enable httpd
+     EOF  
+     tags = { 
+      Name = "Webserver1"
+       }
+    }
+  
+
+
+### Instance as webserver on  Ubuntu
+ resource "aws_instance" "vm2"  {
+     ami  =  "ami-0261755bbcb8c4a84"
+     instance_type = "t2.micro"
+     associate_public_ip_address = true
+     key_name = "oct-7"
+     subnet_id =  aws_subnet.unnati_sub1.id
+     vpc_security_group_ids = [aws_security_group.sg1.id]
+     user_data = <<-EOF
+      #!/bin/bash 
+     sudo  apt update
+     sudo  apt  install  apache2 -y 
+     echo  "Hello from  Anirudha...!  on  Ubuntu Web server....  Welcome to all...!"  > /var/www/html/index.html
+     echo  "Hello This is Aniudha Here ... !"  >  /var/www/html/file.txt 
+     sudo  systemctl restart apache2
+     sudo systemctl enable apache2
+     EOF  
+     tags = { 
+      Name = "Webserver2"
+       }
+    }
+
+
+
+ #### creating local  file on Ubuntu 
+
+    resource "local_file" "terraform_dev" {
+          filename = "/home/ubuntu/sample_pro/demo.txt"
+          content = "Hello From Anirudha...! file successfully created..! "
+
+  }
+
+
+
+
+   ####  Creating S3 bucket with  uploading object with public access 
+
+  
+resource "aws_s3_bucket_website_configuration" "my_bucket" {
+  bucket = "my-aws-bucket1"  # Replace with your desired bucket name
+
+
+   }
+
+
+resource "aws_s3_object" "text_object1"  {
+  bucket = aws_s3_bucket_website_configuration.my_bucket.bucket
+  key    = "example.txt"
+  acl    = "public-read"  # Set ACL to public-read for the object
+  source = "/var/www/html/file.txt"  # Replace with the path to your local text file
+}
+
+
+resource "aws_s3_object" "text_object2" {
+  bucket = aws_s3_bucket_website_configuration.my_bucket.bucket
+  key    = "example1.txt"
+  acl    = "public-read"  # Set ACL to public-read for the object
+  source = "/home/ubuntu/sample_pro/demo.txt"  # Replace with the path to your local text file
+}
+
+
+====================================================================================
+
+ubuntu $ ls
+connection.tf  filesystem  main.tf  terraform.tfstate  terraform.tfstate.backup  terraform.tfvars  vars.tf
+
+ubuntu $ cat terraform.tfstate 
+{
+  "version": 4,
+  "terraform_version": "1.6.0",
+  "serial": 23,
+  "lineage": "3c6b8186-2e9c-25f1-86a2-2dc1bc387724",
+  "outputs": {},
+  "resources": [],
+  "check_results": null
+}
+
+
+
+ubuntu $ cat  terraform.tfvars 
+myregion="us-east-1"
+myaccesskey="AKIAZLVK4VXXFZU3VU73"
+mysecretkey="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"
+
+
+
+
+ubuntu $ cat vars.tf
+variable "myregion" {
+description = "Region Name"
+}
+
+variable "myaccesskey" {
+sensitive = true 
+}
+
+variable "mysecretkey" {
+sensitive = true
+}
+
+
+
+
+ubuntu $ cat connection.tf 
+terraform {
+   required_providers  {
+     aws = {
+     source = "hashicorp/aws"
+     version = "5.7.0"
+    }
+   }
+  }
+
+provider "aws"  {
+        region = var.myregion
+        access_key = var.myaccesskey 
+        secret_key = var.mysecretkey 
+}
+
+
+====================================================================================================
+
+
+
+
+
+
+          
