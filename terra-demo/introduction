@@ -1,0 +1,63 @@
+
+
+Terraform : An infrastructure as a code tool.
+
+Infrastructure as code: codify and version  infrastructure to enable and accelerate cloud 
+      adoption. 
+  
+Challenge : manual provisioning is slow and cumbersome 
+
+solution: automate infrstructure provisioning on and cloud 
+---------------------------------------------------------------------------------
+
+What is terraform ?
+ terraform is infrastructure as a code that let you build change, and version 
+  cloud and on-perm  resources safely and efficiently. 
+
+ terraform is offered by hashicrop.
+
+using  terrform you can use a consistent  workflow  to provision and manage all  of  your 
+ throughtout its life cycle.
+
+-----------------------------------------
+Terraform can manage ? 
+
+terraform  can manage low-level  components like 
+  compute storage and networking resources
+
+as well as high level components  like DNS entires and SaaS features.
+
+
+https://developer.hashicorp.com/terraform/downloads
+
+-------------------------------
+Why  Terraform ? 
+Manage any infrastructure.
+track your infrastructure.
+automate  changes.
+standardize configuration 
+collaborate.
+
+--------------------------------------
+How does  Terraform Works ? 
+Terraform  creates and manages resources  on cloud platform 
+  and other services through  their APIs.
+
+Terraform   -------------------> Terraform provider <---------------> Target API
+
+
+Write  :- Define Infrastructure in configuration file        Terraform configuration / Terraform State file
+
+Plan :-   Review the changes Terraform  will make  to your infrastructure
+
+Apply :- Terraform  provisions you infrastructure and  update the state file. 
+
+Work   _------> plan  -------> apply 
+--------------------------------------------------------------------
+   #terraform.tfvars    --->  stores the  aws iam user credentials
+   #connection.tf      ----> create the connection between aws and terraform
+   #vars.tf    ------->  stores the variable  keywords 
+   #main.tf   ---------> stores the  configuration of resource that need to be create
+-----------------------------------------------------------------------
+
+
