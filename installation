@@ -1,0 +1,22 @@
+
+ wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+--2023-10-07 09:37:58--  https://apt.releases.hashicorp.com/gpg
+4  wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    5  echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+    6  sudo apt update && sudo apt install terraform
+    7  terraform --version 
+    8  pwd
+    9  whoami
+   10  vi terraform.tfvars
+   11  cat terraform.tfvars
+   12  vi vars.tf
+   13  cat vars.tf
+   14  vi connection.tf 
+   15  cat connection.tf
+   16  vi main.tf
+   17  ls
+   18  cat main.tf 
+   19  ls
+   20  cat terraform.tfvars
+   21  cat vars.tf
+   22  cat connection.tf
